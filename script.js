@@ -21,10 +21,10 @@ let time = 0;
 let endTime = 0;
 let copyTime = 0;
 let periodCount = 0;
-let WORK_TIME = 15;
-let SHORT_BREAK = 5;
-let LONG_BREAK = 10;
-let MAX_SESSIONS = 2;
+let WORK_TIME = 1500;  // 25分（1500秒）
+let SHORT_BREAK = 300;  // 5分（300秒）
+let LONG_BREAK = 900;  // 15分（900秒）
+let MAX_SESSIONS = 4;  // 4回
 
 let start = document.getElementById('start');
 let timerEl = document.getElementById('timer');
@@ -34,6 +34,7 @@ let reset = document.getElementById('reset');
 let btnList = document.getElementById('btnList');
 let period = document.getElementById('period');
 let state = document.getElementById('state');
+const endAudio = new Audio('決定ボタンを押す1.mp3');
 
 timerEl.innerHTML = `${secToHML(WORK_TIME)}`
 period.innerHTML = `0/${MAX_SESSIONS}`
@@ -48,16 +49,19 @@ const timerFunc = (num, endTime = WORK_TIME) => {
             timerEl.innerHTML = secToHML(endTime - num);
         } else if (endTime === SHORT_BREAK) {
             clearInterval(timer);
+            endAudio.play();
             timerFunc(0);
             periodCount++;
             period.innerHTML = `${periodCount}/${MAX_SESSIONS}`;
         } else if (endTime === LONG_BREAK) {
             clearInterval(timer);
+            endAudio.play();
             timerEl.innerHTML = secToHML(0);
             period.innerHTML = `${MAX_SESSIONS}/${MAX_SESSIONS}`;
             state.innerHTML = '完了'
         } else {
             clearInterval(timer);
+            endAudio.play();
             if (periodCount === MAX_SESSIONS - 1) {
                 clearInterval(timer);
                 timerFunc(0, LONG_BREAK);
